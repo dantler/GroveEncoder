@@ -1,4 +1,5 @@
-/* GroveEncoder.h - Header for Grove Encoder library
+/**
+ * GroveEncoder.h - Header for Grove Encoder library
  *
  * Copyright (C) 2016 David Antler
  * All rights reserved.
@@ -10,6 +11,7 @@
 #ifndef GROVE_ENCODER_LIB_H_
 #define GROVE_ENCODER_LIB_H_
 
+// Note: PIN_DATA_SIZE must be a power of two due to the queue implementation.
 #define PIN_DATA_SIZE 128
 
 class GroveEncoder {
