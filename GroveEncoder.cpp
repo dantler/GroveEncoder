@@ -86,11 +86,18 @@ void GroveEncoder::updateEncoderFast() {
   unsigned char newValue = (unsigned char)(digitalRead(LOW_PIN) + (digitalRead(HIGH_PIN) << 1));
   // Push to Queue
   pushToQueue(newValue);
+
+  // Do deferrable "slow" work when steady (e.g. both pins are high)
   if(newValue == 3) {
     processQueue();
 
     if(optCallBack != NULL) {
-      optCallBack(value);
+      // Only process the callback if there's new data to post.
+      static int prevValue = 0xDEADBEEF; // squelch the warning.
+      if (value != prevValue) {
+        prevValue = value;
+        optCallBack(value);
+      }
     }
   }
 }
