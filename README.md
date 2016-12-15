@@ -22,17 +22,53 @@ installation instructions may be found [here](https://www.arduino.cc/en/Guide/Li
 
 # Usage
 
-You can use this library via polling, or attach an interrupt handler if you're an advanced user.
+The GroveEncoder library makes it possible to read the value off of an encoder.
+When the knob is turned clockwise, the value will increment.  When the knob is
+turned counterclockwise, the number will decrement.  This value is a 32 bit
+signed integer.
 
-Please see the examples directory.
+You can use this library via polling, or attach an interrupt handler if you're
+an advanced user.  Please see the examples directory.
 
 ## Polling
 
 Simply create a GroveEncoder object and pass NULL as the second parameter.
 
+```c
+#include <GroveEncoder.h>
+
+void loop() {
+  GroveEncoder myEncoder(7, NULL);
+  while (1)
+  {
+    int value = myEncoder.getValue();
+    // getValue returns the number currently on the encoder.
+    Serial.print(value, HEX);
+  }
+}
+```
+
 ## Interrupts
 
 Create a GroveEncoder object and pass it a pin as well as a callback.
+
+```c
+#include <GroveEncoder.h>
+
+void myCallback(int newValue) {
+  Serial.print(newValue, HEX);
+  Serial.print("\n");
+}
+
+void loop() {
+  // Create a GroveEncoder
+  GroveEncoder myEncoder(7, &myCallback);
+  while (1)
+  {
+    // do something else
+  }
+}
+```
 
 # Limitations
 

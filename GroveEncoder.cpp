@@ -1,4 +1,5 @@
-/* GroveEncoder.cpp - Grove Encoder library
+/**
+ * GroveEncoder.cpp - Grove Encoder library
  *
  * Copyright (C) 2016 David Antler
  * All rights reserved.
@@ -48,7 +49,8 @@ enum Rotation {
 
 #define INDEX_MASK(indexValue) (indexValue & (PIN_DATA_SIZE - 1))
 
-inline bool GroveEncoder::pushToQueue(unsigned char myValue) {
+inline bool GroveEncoder::pushToQueue(unsigned char myValue)
+{
   if(queueIsFull()) {
     Serial.println("Queue full, overwriting!");
   }
@@ -57,15 +59,18 @@ inline bool GroveEncoder::pushToQueue(unsigned char myValue) {
   return true;
 }
 
-inline bool GroveEncoder::queueIsEmpty() {
+inline bool GroveEncoder::queueIsEmpty()
+{
   return writeIndex == readIndex;
 }
 
-inline bool GroveEncoder::queueIsFull() {
+inline bool GroveEncoder::queueIsFull()
+{
   return (writeIndex - readIndex) >= PIN_DATA_SIZE;
 }
 
-inline unsigned char GroveEncoder::popFromQueue() {
+inline unsigned char GroveEncoder::popFromQueue()
+{
   unsigned char outValue = 0xFF;
   if(!queueIsEmpty()) {
     outValue = pinDataQueue[INDEX_MASK(readIndex)];
@@ -77,13 +82,16 @@ inline unsigned char GroveEncoder::popFromQueue() {
 }
 
 // This function only exists due to the singleton issue.
-void GroveEncoder::privateIntHandler() {
+void GroveEncoder::privateIntHandler()
+{
   singleton->updateEncoderFast();
 }
 
 // This routine is supposed to be very very fast.
-void GroveEncoder::updateEncoderFast() {
-  unsigned char newValue = (unsigned char)(digitalRead(LOW_PIN) + (digitalRead(HIGH_PIN) << 1));
+void GroveEncoder::updateEncoderFast()
+{
+  unsigned char newValue;
+  newValue = (unsigned char)(digitalRead(LOW_PIN) + (digitalRead(HIGH_PIN) << 1));
   // Push to Queue
   pushToQueue(newValue);
 
@@ -109,7 +117,11 @@ void GroveEncoder::updateEncoderFast() {
     pinB = (pins & 0x02) >> 1;            \
 }
 
-void GroveEncoder::processQueue() {
+/**
+ * Processes the queue of bytes
+ */
+void GroveEncoder::processQueue()
+{
   int pinA, pinB;
   char stage = STAGE_ZERO;
   Rotation rotation = UNCERTAIN;
@@ -227,7 +239,7 @@ void GroveEncoder::setValue(int newValue)
 
 /**
  * This will enumerate a GroveEncoder on a particular pin.
- * Youu can provide an optional callback, or poll the "getValue" API.
+ * You can provide an optional callback, or poll the "getValue()" API.
  */
 GroveEncoder::GroveEncoder(int pin, void (*optionalCallBack)(int))
 {
