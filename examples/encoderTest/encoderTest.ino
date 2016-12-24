@@ -16,7 +16,7 @@ void loop() {
   GroveEncoder myEncoder(7, &myCallback);
   while(1)
   {
-    delayMicroseconds(1000000);
+    delay(1000);
 
     Serial.print("\nLoop... ");
   }
